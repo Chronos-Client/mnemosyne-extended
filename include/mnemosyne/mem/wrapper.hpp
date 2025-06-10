@@ -66,6 +66,18 @@ namespace mnem {
             Traits::construct(this->buffer(), *std::move(move));
         }
 
+        wrap& operator=(const wrap&) = delete;
+        wrap& operator=(const wrap& val) noexcept(std::is_nothrow_copy_assignable_v<T>) requires std::is_copy_assignable_v<T> {
+            **this = *val;
+            return *this;
+        }
+
+        wrap& operator=(wrap&&) = delete;
+        wrap& operator=(wrap&& val) noexcept(std::is_nothrow_move_assignable_v<T>) requires std::is_move_assignable_v<T> {
+            **this = *std::move(val);
+            return *this;
+        }
+
         [[nodiscard]] std::byte* buffer() {
             return this->buffer_;
         }
